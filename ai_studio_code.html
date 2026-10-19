@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Rama Little Helper ♡</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- PDF.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <style>
+    :root {
+      --bg-cream: #fff5f7;
+      --bg-card: #ffffff;
+      --pink-soft: #ffe4e9;
+      --pink-accent: #f472b6;
+      --pink-deep: #db2777;
+      --rose-glow: #fbcfe8;
+      --ink-black: #09090b;
+      --ink-muted: #52525b;
+      --border-black: #18181b;
+      --border-soft: #fce7f3;
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --shadow-bold: 3px 3px 0px var(--border-black);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-cream);
+      color: var(--ink-black);
+      line-height: 1.5;
+      padding-top: env(safe-area-inset-top, 20px);
+      padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 85px);
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(circle at 10% 10%, rgba(251, 207, 232, 0.4) 0%, transparent 40%),
+        radial-gradient(circle at 90% 90%, rgba(254, 205, 211, 0.4) 0%, transparent 40%);
+      background-attachment: fixed;
+    }
+
+    .bg-heart-decor {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.18;
+      font-size: 8rem;
+      user-select: none;
+    }
+    .heart-top { top: 2%; right: -20px; transform: rotate(15deg); }
+    .heart-bottom { bottom: 10%; left: -25px; transform: rotate(-15deg); }
+
+    .app-container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 16px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+      padding-top: 10px;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--pink-soft);
+      border: 1.5px solid var(--border-black);
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    h1.app-title {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--ink-black);
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    h1.app-title .heart-icon {
+      color: var(--pink-deep);
+      animation: heartbeat 2s infinite ease-in-out;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    .app-subtitle {
+      font-size: 0.95rem;
+      color: var(--ink-muted);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-black);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-bold);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      border-bottom: 1.5px dashed var(--border-soft);
+      padding-bottom: 10px;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .honest-badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      background: #f4f4f5;
+      color: #3f3f46;
+      border: 1px solid #d4d4d8;
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 13px 20px;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border-black);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+      width: 100%;
+    }
+
+    .btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: none !important;
+    }
+
+    .btn-pink {
+      background-color: var(--pink-soft);
+      color: var(--ink-black);
+      box-shadow: 2px 2px 0px var(--border-black);
+    }
+
+    .btn-black {
+      background-color: var(--ink-black);
+      color: #ffffff;
+      box-shadow: 2px 2px 0px var(--pink-deep);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: var(--ink-black);
+      border: 1.5px solid var(--ink-black);
+    }
+
+    .btn-sm {
+      padding: 8px 14px;
+      font-size: 0.82rem;
+      width: auto;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .upload-dropzone {
+      border: 2px dashed var(--border-black);
+      background-color: #fff9fb;
+      border-radius: var(--radius-md);
+      padding: 24px 16px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .upload-dropzone input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .upload-icon {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-top: 2px solid var(--border-black);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 10px calc(env(safe-area-inset-bottom, 12px) + 6px);
+      z-index: 100;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      color: var(--ink-muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+    }
+
+    .nav-btn.active {
+      color: var(--ink-black);
+      background: var(--pink-soft);
+      border: 1.5px solid var(--border-black);
+    }
+
+    .status-msg {
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin: 10px 0;
+      display: none;
+    }
+
+    .status-msg.error {
+      display: block;
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1.5px solid #ef4444;
+    }
+
+    .status-msg.success {
+      display: block;
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1.5px solid #10b981;
+    }
+
+    .status-msg.info {
+      display: block;
+      background: #fdf2f8;
+      color: var(--pink-deep);
+      border: 1.5px solid var(--pink-accent);
+    }
+
+    textarea.styled-textarea {
+      width: 100%;
+      min-height: 180px;
+      border: 1.5px solid var(--border-black);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      color: var(--ink-black);
+      background: #ffffff;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .study-box {
+      background: #fff8fa;
+      border: 1.5px solid var(--border-black);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-top: 14px;
+    }
+
+    .term-card {
+      background: #ffffff;
+      border: 1.5px solid var(--border-black);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+
+    .term-card .term-word {
+      font-weight: 800;
+      color: var(--pink-deep);
+      font-size: 0.92rem;
+    }
+
+    .bilingual-card {
+      background: #ffffff;
+      border: 1.5px solid var(--border-black);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .bilingual-card .arabic-text {
+      font-family: 'Amiri', serif;
+      font-size: 1.15rem;
+      direction: rtl;
+      text-align: right;
+      color: #1f2937;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px dashed var(--pink-accent);
+    }
+
+    .quiz-question {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .quiz-option {
+      background: #ffffff;
+      border: 2px solid var(--border-black);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .quiz-option.selected-correct {
+      background-color: #d1fae5;
+      border-color: #059669;
+      color: #065f46;
+    }
+
+    .quiz-option.selected-wrong {
+      background-color: #fee2e2;
+      border-color: #dc2626;
+      color: #991b1b;
+    }
+
+    .quiz-feedback {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .recorder-ui {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: #fff0f5;
+      border: 1.5px dashed var(--border-black);
+      border-radius: var(--radius-md);
+      margin-top: 10px;
+    }
+
+    .record-dot {
+      width: 14px;
+      height: 14px;
+      background-color: #ef4444;
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.2); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .saved-note-item {
+      background: #ffffff;
+      border: 1.5px solid var(--border-black);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .saved-note-item .note-date {
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+      font-weight: 600;
+    }
+
+    .saved-note-item .note-snippet {
+      font-size: 0.88rem;
+      margin: 8px 0;
+      white-space: pre-wrap;
+      max-height: 80px;
+      overflow: hidden;
+    }
+
+    .badge-pill {
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: var(--pink-soft);
+      border: 1px solid var(--border-black);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-heart-decor heart-top">♡</div>
+  <div class="bg-heart-decor heart-bottom">♡</div>
+
+  <div class="app-container">
+
+    <header>
+      <div class="brand-badge"><span>🎀</span> University Study Companion <span>🎀</span></div>
+      <h1 class="app-title">Rama Little Helper <span class="heart-icon">♡</span></h1>
+      <p class="app-subtitle">Welcome to Rama’s Study Space ♡</p>
+    </header>
+
+    <!-- TAB 1: HOME PAGE -->
+    <div id="tab-home" class="tab-content active">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><span>🌸</span> Hello Rama, Ready to Study?</span>
+        </div>
+        <p style="font-size: 0.95rem; margin-bottom: 16px; color: var(--ink-muted);">
+          Extract lecture slides, create study notes, practice multiple choice quizzes, and organize your course materials directly on your iPhone.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <button class="btn btn-pink" onclick="switchTab('upload')">
+            <span>📄</span> Upload & Extract Lecture
+          </button>
+          <button class="btn btn-pink" onclick="switchTab('study')">
+            <span>📖</span> Open Study Workspace
+          </button>
+          <button class="btn btn-pink" onclick="switchTab('quiz')">
+            <span>✨</span> Practice Quiz Generator
+          </button>
+          <button class="btn btn-black" onclick="switchTab('notes')">
+            <span>📝</span> View Saved Notes (<span id="home-notes-count">0</span>)
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><span>⏳</span> Recent Study Sessions</span>
+          <span class="badge-pill" id="session-count">0 Sessions</span>
+        </div>
+        <div id="recent-sessions-list">
+          <p style="font-size: 0.88rem; color: var(--ink-muted); text-align: center; padding: 10px;">
+            No sessions yet. Upload a lecture or jot down notes to start!
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: LECTURE UPLOAD -->
+    <div id="tab-upload" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><span>📄</span> Lecture Text Extractor</span>
+        </div>
+
+        <div class="upload-dropzone" id="drop-area">
+          <input type="file" id="file-input" accept=".pdf,.txt,.text,.md,.json">
+          <div class="upload-icon">📂</div>
+          <div style="font-weight: 700; font-size: 1rem;">Tap to select PDF or TXT lecture</div>
+          <div style="font-size: 0.78rem; color: var(--ink-muted); margin-top: 4px;">
+            Extracts directly inside Safari. Files never leave your iPhone.
+          </div>
+        </div>
+
+        <div id="upload-status" class="status-msg"></div>
+
+        <div style="margin-top: 16px;">
+          <label style="font-weight: 700; font-size: 0.85rem; display: block; margin-bottom: 6px;">Extracted / Working Text:</label>
+          <textarea id="lecture-text" class="styled-textarea" placeholder="Your lecture text will appear here automatically after upload. You can also paste text here manually..."></textarea>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-black" onclick="sendToStudyWorkspace()">
+            <span>✨</span> Send to Study Workspace
+          </button>
+          <button class="btn btn-outline btn-sm" onclick="clearExtractedText()">Clear</button>
+        </div>
+
+        <div class="study-box" style="margin-top: 14px;">
+          <span class="honest-badge">Honest Browser Technology</span>
+          <p style="font-size: 0.78rem; color: var(--ink-muted); margin-top: 4px;">
+            Note: This browser extractor processes digital text PDFs. If a PDF consists purely of flat scanned photos or handwriting without optical character recognition (OCR), text cannot be parsed without a cloud backend.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: STUDY WORKSPACE -->
+    <div id="tab-study" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><span>📖</span> Study Workspace</span>
+          <button class="btn btn-pink btn-sm" onclick="saveCurrentWorkspaceAsNote()">Save Note ♡</button>
+        </div>
+
+        <div>
+          <label style="font-weight: 700; font-size: 0.85rem;">Lecture Title / Subject:</label>
+          <input type="text" id="workspace-title" placeholder="e.g. Biology Ch. 3 - Cell Structure" style="width: 100%; padding: 10px; border: 1.5px solid var(--border-black); border-radius: var(--radius-sm); font-family: inherit; margin-top: 4px; margin-bottom: 12px; font-weight: 600;">
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+          <button class="btn btn-pink btn-sm" style="flex: 1;" onclick="generateKeySummary()">
+            <span>⚡</span> Extract Key Terms & Points
+          </button>
+          <button class="btn btn-outline btn-sm" style="flex: 1;" onclick="openBilingualHelper()">
+            <span>🌍</span> Bilingual Mode
+          </button>
+        </div>
+
+        <div>
+          <label style="font-weight: 700; font-size: 0.85rem;">Summary & Notes Editor:</label>
+          <textarea id="workspace-summary" class="styled-textarea" style="min-height: 120px;" placeholder="Write or generate summary points..."></textarea>
+        </div>
+
+        <div class="study-box" id="key-terms-container" style="display: none;">
+          <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 8px;">Key Concepts & Identified Terms:</div>
+          <div id="terms-list"></div>
+        </div>
+
+        <div class="study-box" id="bilingual-container" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-weight: 800; font-size: 0.95rem;">Bilingual Study Reference (En / Ar)</span>
+            <span class="badge-pill">Study Helper</span>
+          </div>
+          <p style="font-size: 0.78rem; color: var(--ink-muted); margin-bottom: 10px;">
+            Common academic terms mapped to Arabic translations for quick reference.
+          </p>
+          <div id="bilingual-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: PRACTICE QUIZZES -->
+    <div id="tab-quiz" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><span>✨</span> Practice Quiz Generator</span>
+          <span class="honest-badge">Client-Side Generator</span>
+        </div>
+
+        <p style="font-size: 0.88rem; color: var(--ink-muted); margin-bottom: 14px;">
+          Generates multiple-choice practice questions directly from your active lecture material using phrase and context analysis.
+        </p>
+
+        <button class="btn btn-pink" onclick="generateQuizFromText()">
+          <span>🎯</span> Generate Quiz From Lecture
+        </button>
+
+        <div id="quiz-area" style="margin-top: 18px; display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-weight: 800; font-size: 0.9rem;" id="quiz-progress">Question 1 of 5</span>
+            <span class="badge-pill" id="quiz-score-badge">Score: 0</span>
+          </div>
+
+          <div id="quiz-question-container">
+            <div class="quiz-question" id="quiz-question-text">Question prompt goes here</div>
+            <div id="quiz-options-list"></div>
+            <div id="quiz-explanation" class="quiz-feedback" style="display: none;"></div>
+          </div>
+
+          <div class="btn-group" style="margin-top: 14px;">
+            <button id="quiz-next-btn" class="btn btn-black" style="display: none;" onclick="nextQuizQuestion()">Next Question ➜</button>
+            <button id="quiz-retry-btn" class="btn btn-outline" style="display: none;" onclick="generateQuizFromText()">Retry Quiz ⟳</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: AUDIO RECORD & NOTES -->
+    <div id="tab-audio" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><span>🎙️</span> Lecture Voice Memos</span>
+          <span class="honest-badge">Browser Audio</span>
+        </div>
+
+        <p style="font-size: 0.88rem; color: var(--ink-muted); margin-bottom: 12px;">
+          Record lecture audio snippets or professor explanations directly onto your device.
+        </p>
+
+        <div class="recorder-ui">
+          <div id="record-indicator" style="display: none; align-items: center; gap: 8px; font-weight: 700; color: #dc2626;">
+            <span class="record-dot"></span> Recording audio...
+          </div>
+          
+          <div style="display: flex; gap: 10px; width: 100%;">
+            <button id="start-rec-btn" class="btn btn-pink" onclick="toggleAudioRecording()">
+              <span>🔴</span> Record Audio
+            </button>
+            <button id="stop-rec-btn" class="btn btn-black" style="display: none;" onclick="stopAudioRecording()">
+              <span>⏹</span> Stop
+            </button>
+          </div>
+
+          <audio id="audio-playback" controls style="width: 100%; display: none; margin-top: 8px;"></audio>
+        </div>
+
+        <div class="study-box" style="margin-top: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: 700; font-size: 0.88rem;">Lecture Audio Notes / Live Speech</span>
+            <button class="btn btn-outline btn-sm" onclick="startSpeechToText()">🎙 Dictate</button>
+          </div>
+          <div id="speech-support-info" style="font-size: 0.78rem; color: var(--ink-muted); margin: 6px 0;">
+            Uses Safari's built-in Web Speech API if supported by your iOS version.
+          </div>
+          <textarea id="audio-transcript-box" class="styled-textarea" style="min-height: 100px; margin-top: 8px;" placeholder="Audio dictation or your lecture voice notes will appear here..."></textarea>
+          <button class="btn btn-pink btn-sm" style="margin-top: 8px;" onclick="transferTranscriptToLecture()">Send to Lecture Workspace</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 6: SAVED NOTES -->
+    <div id="tab-notes" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><span>📝</span> Saved Study Notes</span>
+          <button class="btn btn-outline btn-sm" onclick="clearAllNotes()">Clear All</button>
+        </div>
+
+        <div id="notes-list-container">
+          <p style="font-size: 0.88rem; color: var(--ink-muted); text-align: center; padding: 20px;">
+            No saved notes yet. Tap "Save Note ♡" in the Study Workspace!
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="switchTab('home')" id="nav-home">
+      <span class="nav-icon">🌸</span>
+      <span>Home</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('upload')" id="nav-upload">
+      <span class="nav-icon">📄</span>
+      <span>Upload</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('study')" id="nav-study">
+      <span class="nav-icon">📖</span>
+      <span>Study</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('quiz')" id="nav-quiz">
+      <span class="nav-icon">✨</span>
+      <span>Quiz</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('audio')" id="nav-audio">
+      <span class="nav-icon">🎙️</span>
+      <span>Audio</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('notes')" id="nav-notes">
+      <span class="nav-icon">📝</span>
+      <span>Notes</span>
+    </button>
+  </nav>
+
+  <script>
+    if (window.pdfjsLib) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+
+    let activeExtractedText = "";
+    let quizQuestions = [];
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecording = false;
+
+    const academicDictionary = {
+      "definition": "تعريف",
+      "analysis": "تحليل",
+      "hypothesis": "فرضية",
+      "theory": "نظرية",
+      "concept": "مفهوم",
+      "process": "عملية",
+      "function": "وظيفة",
+      "structure": "بنية / هيكل",
+      "system": "نظام",
+      "mechanism": "آلية",
+      "evaluation": "تقييم",
+      "principle": "مبدأ",
+      "experiment": "تجربة",
+      "result": "نتيجة",
+      "conclusion": "خاتمة / استنتاج",
+      "variable": "متغير",
+      "development": "تطوير",
+      "factor": "عامل",
+      "characteristic": "خاصية / سمة",
+      "method": "طريقة / منهج"
+    };
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+      const targetTab = document.getElementById(`tab-${tabId}`);
+      const targetNav = document.getElementById(`nav-${tabId}`);
+      if (targetTab) targetTab.classList.add('active');
+      if (targetNav) targetNav.classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (tabId === 'notes') renderSavedNotes();
+      if (tabId === 'home') renderHomeData();
+    }
+
+    const fileInput = document.getElementById('file-input');
+    const uploadStatus = document.getElementById('upload-status');
+    const lectureTextArea = document.getElementById('lecture-text');
+
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      showStatus(`Reading "${file.name}"...`, 'info');
+
+      try {
+        if (file.type === "application/pdf" || file.name.endsWith('.pdf')) {
+          await extractTextFromPDF(file);
+        } else if (file.type.startsWith('text/') || file.name.endsWith('.txt') || file.name.endsWith('.md') || file.name.endsWith('.json')) {
+          const text = await file.text();
+          handleExtractedSuccess(text, file.name);
+        } else {
+          showStatus("Unsupported format. Please select a readable PDF or TXT file.", "error");
+        }
+      } catch (err) {
+        showStatus("Could not extract text: " + err.message, "error");
+      }
+    });
+
+    async function extractTextFromPDF(file) {
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let fullText = "";
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const tokenizedText = await page.getTextContent();
+          const pageText = tokenizedText.items.map(token => token.str).join(" ");
+          fullText += `--- Page ${i} ---\n` + pageText + "\n\n";
+        }
+
+        fullText = fullText.trim();
+
+        if (!fullText || fullText.replace(/--- Page \d+ ---/g, '').trim().length === 0) {
+          showStatus("⚠️ No digital text found. This PDF appears to be a scanned image without selectable text.", "error");
+        } else {
+          handleExtractedSuccess(fullText, file.name);
+        }
+      } catch (error) {
+        showStatus("PDF extraction error. The file may be password protected or corrupted.", "error");
+      }
+    }
+
+    function handleExtractedSuccess(text, fileName) {
+      activeExtractedText = text;
+      lectureTextArea.value = text;
+      showStatus(`Successfully extracted text from ${fileName}! ♡`, "success");
+      saveSessionHistory(fileName);
+      renderHomeData();
+    }
+
+    function showStatus(msg, type) {
+      uploadStatus.textContent = msg;
+      uploadStatus.className = `status-msg ${type}`;
+    }
+
+    function clearExtractedText() {
+      lectureTextArea.value = "";
+      activeExtractedText = "";
+      uploadStatus.className = "status-msg";
+    }
+
+    function sendToStudyWorkspace() {
+      const text = lectureTextArea.value.trim();
+      if (!text) {
+        alert("Please upload a lecture or type some text first ♡");
+        return;
+      }
+      activeExtractedText = text;
+      document.getElementById('workspace-summary').value = text.slice(0, 500) + (text.length > 500 ? "..." : "");
+      switchTab('study');
+    }
+
+    function generateKeySummary() {
+      const text = lectureTextArea.value.trim() || document.getElementById('workspace-summary').value.trim();
+      if (!text) {
+        alert("Please provide lecture text to analyze ♡");
+        return;
+      }
+
+      const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+      const importantKeywords = ["is defined as", "refers to", "important", "key", "principle", "because", "therefore", "essential", "primary", "function", "results in", "defined", "consists of"];
+      
+      const keyPoints = [];
+      sentences.forEach(s => {
+        const lower = s.toLowerCase();
+        if (importantKeywords.some(kw => lower.includes(kw)) && s.trim().length > 25 && s.trim().length < 250) {
+          keyPoints.push(s.trim());
+        }
+      });
+
+      const summaryList = keyPoints.slice(0, 5);
+      if (summaryList.length === 0) {
+        summaryList.push(...sentences.slice(0, 4).map(s => s.trim()));
+      }
+
+      document.getElementById('workspace-summary').value = "📌 SUMMARY POINTS:\n\n" + summaryList.map((pt, i) => `${i+1}. ${pt}`).join("\n\n");
+
+      const wordCounts = {};
+      const words = text.match(/\b[A-Za-z]{4,}\b/g) || [];
+      const stopWords = new Set(["this", "that", "with", "from", "have", "were", "which", "there", "their", "about", "could", "would", "these", "other"]);
+      
+      words.forEach(w => {
+        const lower = w.toLowerCase();
+        if (!stopWords.has(lower)) {
+          wordCounts[lower] = (wordCounts[lower] || 0) + 1;
+        }
+      });
+
+      const sortedTerms = Object.keys(wordCounts).sort((a,b) => wordCounts[b] - wordCounts[a]).slice(0, 6);
+
+      const termsListContainer = document.getElementById('terms-list');
+      termsListContainer.innerHTML = "";
+      sortedTerms.forEach(term => {
+        const contextSentence = sentences.find(s => s.toLowerCase().includes(term)) || "Appears frequently in this lecture.";
+        const div = document.createElement('div');
+        div.className = "term-card";
+        div.innerHTML = `
+          <div class="term-word">${term.toUpperCase()}</div>
+          <div style="font-size: 0.82rem; color: var(--ink-muted); margin-top: 2px;">Context: "${contextSentence.trim().slice(0, 140)}..."</div>
+        `;
+        termsListContainer.appendChild(div);
+      });
+
+      document.getElementById('key-terms-container').style.display = "block";
+    }
+
+    function openBilingualHelper() {
+      const container = document.getElementById('bilingual-container');
+      const list = document.getElementById('bilingual-list');
+      list.innerHTML = "";
+
+      const text = (lectureTextArea.value + " " + document.getElementById('workspace-summary').value).toLowerCase();
+      
+      let matchCount = 0;
+      for (const [en, ar] of Object.entries(academicDictionary)) {
+        if (text.includes(en)) {
+          matchCount++;
+          const card = document.createElement('div');
+          card.className = "bilingual-card";
+          card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:700; color:var(--ink-black);">${en.toUpperCase()}</span>
+              <span style="font-size:0.75rem; color:var(--pink-deep); font-weight:600;">Academic Term</span>
+            </div>
+            <div class="arabic-text">${ar}</div>
+          `;
+          list.appendChild(card);
+        }
+      }
+
+      if (matchCount === 0) {
+        list.innerHTML = `<div style="font-size:0.85rem; color:var(--ink-muted); padding:8px;">Here are common core study terms:</div>`;
+        Object.entries(academicDictionary).slice(0, 6).forEach(([en, ar]) => {
+          const card = document.createElement('div');
+          card.className = "bilingual-card";
+          card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:700;">${en.toUpperCase()}</span>
+            </div>
+            <div class="arabic-text">${ar}</div>
+          `;
+          list.appendChild(card);
+        });
+      }
+
+      container.style.display = "block";
+      container.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function saveCurrentWorkspaceAsNote() {
+      const title = document.getElementById('workspace-title').value.trim() || "Untitled Lecture Note";
+      const summary = document.getElementById('workspace-summary').value.trim();
+
+      if (!summary) {
+        alert("Please write or generate some notes before saving ♡");
+        return;
+      }
+
+      const notes = JSON.parse(localStorage.getItem('rama_saved_notes') || "[]");
+      const newNote = {
+        id: Date.now(),
+        title: title,
+        content: summary,
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+      };
+
+      notes.unshift(newNote);
+      localStorage.setItem('rama_saved_notes', JSON.stringify(notes));
+      alert("Note saved successfully to your iPhone! ♡");
+      renderHomeData();
+    }
+
+    function renderSavedNotes() {
+      const notes = JSON.parse(localStorage.getItem('rama_saved_notes') || "[]");
+      const container = document.getElementById('notes-list-container');
+
+      if (notes.length === 0) {
+        container.innerHTML = `<p style="font-size: 0.88rem; color: var(--ink-muted); text-align: center; padding: 20px;">No saved notes yet. Tap "Save Note ♡" in the Study Workspace!</p>`;
+        return;
+      }
+
+      container.innerHTML = "";
+      notes.forEach(note => {
+        const item = document.createElement('div');
+        item.className = "saved-note-item";
+        item.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="font-size:0.95rem;">${note.title}</strong>
+            <span class="note-date">${note.date}</span>
+          </div>
+          <div class="note-snippet">${note.content}</div>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button class="btn btn-outline btn-sm" onclick="loadNoteIntoWorkspace(${note.id})">Load</button>
+            <button class="btn btn-outline btn-sm" style="color:#dc2626; border-color:#dc2626;" onclick="deleteNote(${note.id})">Delete</button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function loadNoteIntoWorkspace(id) {
+      const notes = JSON.parse(localStorage.getItem('rama_saved_notes') || "[]");
+      const note = notes.find(n => n.id === id);
+      if (note) {
+        document.getElementById('workspace-title').value = note.title;
+        document.getElementById('workspace-summary').value = note.content;
+        switchTab('study');
+      }
+    }
+
+    function deleteNote(id) {
+      if (!confirm("Are you sure you want to delete this note? ♡")) return;
+      let notes = JSON.parse(localStorage.getItem('rama_saved_notes') || "[]");
+      notes = notes.filter(n => n.id !== id);
+      localStorage.setItem('rama_saved_notes', JSON.stringify(notes));
+      renderSavedNotes();
+      renderHomeData();
+    }
+
+    function clearAllNotes() {
+      if (!confirm("Clear all your saved notes? This action cannot be undone.")) return;
+      localStorage.removeItem('rama_saved_notes');
+      renderSavedNotes();
+      renderHomeData();
+    }
+
+    function generateQuizFromText() {
+      const text = lectureTextArea.value.trim() || document.getElementById('workspace-summary').value.trim();
+      if (!text || text.length < 50) {
+        alert("Please load or paste lecture text first in the Upload tab to generate quiz questions ♡");
+        switchTab('upload');
+        return;
+      }
+
+      const sentences = (text.match(/[^.!?]+[.!?]+/g) || [])
+        .map(s => s.trim())
+        .filter(s => s.length > 40 && s.length < 180);
+
+      if (sentences.length < 3) {
+        alert("We need a little more lecture text to generate valid quiz questions ♡");
+        return;
+      }
+
+      quizQuestions = [];
+      const usedSentences = sentences.slice(0, 10);
+
+      usedSentences.forEach((sentence) => {
+        const words = sentence.split(/\s+/).filter(w => w.length > 5 && !/^[0-9]+$/.test(w));
+        if (words.length > 0) {
+          const targetWord = words[Math.floor(Math.random() * words.length)].replace(/[^a-zA-Z]/g, '');
+          if (targetWord.length >= 4) {
+            const blanked = sentence.replace(new RegExp(`\\b${targetWord}\\b`, 'i'), "________");
+            
+            const distractors = ["function", "structure", "process", "synthesis", "analysis", "system", "membrane", "catalyst", "equilibrium"]
+              .filter(w => w.toLowerCase() !== targetWord.toLowerCase());
+            
+            const shuffledDistractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 3);
+            const options = [...shuffledDistractors, targetWord].sort(() => 0.5 - Math.random());
+
+            quizQuestions.push({
+              prompt: `Complete the sentence from your lecture:\n"${blanked}"`,
+              options: options,
+              correct: targetWord,
+              originalSentence: sentence
+            });
+          }
+        }
+      });
+
+      if (quizQuestions.length === 0) {
+        alert("Could not extract enough quiz statements. Try adding more lecture text.");
+        return;
+      }
+
+      currentQuizIndex = 0;
+      quizScore = 0;
+      document.getElementById('quiz-area').style.display = "block";
+      displayQuizQuestion();
+    }
+
+    function displayQuizQuestion() {
+      const q = quizQuestions[currentQuizIndex];
+      document.getElementById('quiz-progress').textContent = `Question ${currentQuizIndex + 1} of ${quizQuestions.length}`;
+      document.getElementById('quiz-score-badge').textContent = `Score: ${quizScore}`;
+      document.getElementById('quiz-question-text').textContent = q.prompt;
+      
+      const optionsContainer = document.getElementById('quiz-options-list');
+      optionsContainer.innerHTML = "";
+      
+      const explanation = document.getElementById('quiz-explanation');
+      explanation.style.display = "none";
+      explanation.textContent = "";
+
+      document.getElementById('quiz-next-btn').style.display = "none";
+      document.getElementById('quiz-retry-btn').style.display = "none";
+
+      q.options.forEach(opt => {
+        const optBtn = document.createElement('div');
+        optBtn.className = "quiz-option";
+        optBtn.textContent = opt;
+        optBtn.onclick = () => selectQuizAnswer(opt, optBtn, q);
+        optionsContainer.appendChild(optBtn);
+      });
+    }
+
+    function selectQuizAnswer(selectedOption, optElement, questionData) {
+      const options = document.querySelectorAll('.quiz-option');
+      options.forEach(el => el.onclick = null);
+
+      const explanation = document.getElementById('quiz-explanation');
+      explanation.style.display = "block";
+
+      const isCorrect = selectedOption.toLowerCase() === questionData.correct.toLowerCase();
+
+      if (isCorrect) {
+        optElement.classList.add('selected-correct');
+        quizScore += 1;
+        document.getElementById('quiz-score-badge').textContent = `Score: ${quizScore}`;
+        explanation.style.background = "#ecfdf5";
+        explanation.style.color = "#065f46";
+        explanation.innerHTML = `✨ Correct! "${questionData.correct}" completes the lecture point: <br><i>${questionData.originalSentence}</i>`;
+      } else {
+        optElement.classList.add('selected-wrong');
+        options.forEach(el => {
+          if (el.textContent.toLowerCase() === questionData.correct.toLowerCase()) {
+            el.classList.add('selected-correct');
+          }
+        });
+        explanation.style.background = "#fee2e2";
+        explanation.style.color = "#991b1b";
+        explanation.innerHTML = `♡ Not quite! The correct answer is <b>${questionData.correct}</b>.<br><i>Context: "${questionData.originalSentence}"</i>`;
+      }
+
+      if (currentQuizIndex < quizQuestions.length - 1) {
+        document.getElementById('quiz-next-btn').style.display = "block";
+      } else {
+        document.getElementById('quiz-retry-btn').style.display = "block";
+        explanation.innerHTML += `<br><br><b>Quiz Completed! Final Score: ${quizScore} / ${quizQuestions.length} ♡</b>`;
+      }
+    }
+
+    function nextQuizQuestion() {
+      currentQuizIndex++;
+      displayQuizQuestion();
+    }
+
+    async function toggleAudioRecording() {
+      if (isRecording) return;
+      try {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          alert("Audio recording is not supported in this browser environment.");
+          return;
+        }
+
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioChunks = [];
+        mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = e => {
+          if (e.data.size > 0) audioChunks.push(e.data);
+        };
+
+        mediaRecorder.onstop = () => {
+          const audioBlob = new Blob(audioChunks, { type: 'audio/mp4' });
+          const audioUrl = URL.createObjectURL(audioBlob);
+          const playback = document.getElementById('audio-playback');
+          playback.src = audioUrl;
+          playback.style.display = "block";
+        };
+
+        mediaRecorder.start();
+        isRecording = true;
+        document.getElementById('record-indicator').style.display = "flex";
+        document.getElementById('start-rec-btn').style.display = "none";
+        document.getElementById('stop-rec-btn').style.display = "block";
+      } catch (err) {
+        alert("Microphone permission denied or not available: " + err.message);
+      }
+    }
+
+    function stopAudioRecording() {
+      if (mediaRecorder && isRecording) {
+        mediaRecorder.stop();
+        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        isRecording = false;
+        document.getElementById('record-indicator').style.display = "none";
+        document.getElementById('start-rec-btn').style.display = "block";
+        document.getElementById('stop-rec-btn').style.display = "none";
+      }
+    }
+
+    function startSpeechToText() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const statusBox = document.getElementById('speech-support-info');
+
+      if (!SpeechRecognition) {
+        statusBox.innerHTML = "<span style='color:#dc2626;'>Live speech transcription is unavailable on this browser engine. You can type notes directly into the box.</span>";
+        return;
+      }
+
+      try {
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+
+        statusBox.textContent = "Listening... Speak clearly into your microphone.";
+
+        recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          const box = document.getElementById('audio-transcript-box');
+          box.value += (box.value ? " " : "") + transcript;
+          statusBox.textContent = "Transcription added successfully! ♡";
+        };
+
+        recognition.onerror = (event) => {
+          statusBox.textContent = "Dictation note: " + event.error;
+        };
+
+        recognition.start();
+      } catch (e) {
+        statusBox.textContent = "Dictation error: " + e.message;
+      }
+    }
+
+    function transferTranscriptToLecture() {
+      const text = document.getElementById('audio-transcript-box').value.trim();
+      if (!text) {
+        alert("Please dictate or type audio notes first ♡");
+        return;
+      }
+      lectureTextArea.value += "\n\n--- Audio Notes ---\n" + text;
+      alert("Transferred into lecture text! Opening workspace ♡");
+      switchTab('upload');
+    }
+
+    function saveSessionHistory(name) {
+      const sessions = JSON.parse(localStorage.getItem('rama_sessions') || "[]");
+      sessions.unshift({
+        name: name,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        date: new Date().toLocaleDateString()
+      });
+      localStorage.setItem('rama_sessions', JSON.stringify(sessions.slice(0, 5)));
+    }
+
+    function renderHomeData() {
+      const notes = JSON.parse(localStorage.getItem('rama_saved_notes') || "[]");
+      const sessions = JSON.parse(localStorage.getItem('rama_sessions') || "[]");
+
+      document.getElementById('home-notes-count').textContent = notes.length;
+      document.getElementById('session-count').textContent = `${sessions.length} Recent`;
+
+      const listContainer = document.getElementById('recent-sessions-list');
+      if (sessions.length === 0) {
+        listContainer.innerHTML = `<p style="font-size: 0.88rem; color: var(--ink-muted); text-align: center; padding: 10px;">No sessions yet. Upload a lecture or jot down notes to start!</p>`;
+        return;
+      }
+
+      listContainer.innerHTML = "";
+      sessions.forEach(sess => {
+        const row = document.createElement('div');
+        row.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border-soft); font-size:0.85rem;";
+        row.innerHTML = `
+          <span><b>📖 ${sess.name}</b></span>
+          <span style="color:var(--ink-muted); font-size:0.75rem;">${sess.date} ${sess.time}</span>
+        `;
+        listContainer.appendChild(row);
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderHomeData();
+    });
+  </script>
+</body>
+</html>
